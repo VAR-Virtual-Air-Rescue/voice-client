@@ -6,7 +6,6 @@ import { mainProcessConnection } from './mainProcessCommunication';
 
 function createWindow(): void {
     // Create the browser window.
-    console.log('test');
     const mainWindow = new BrowserWindow({
         width: 900,
         height: 670,
@@ -41,9 +40,11 @@ function createWindow(): void {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
-  ipcMain.handle('dialog:openFile', () => {
-    mainProcessConnection.startConnection()
-  })
+    //ipcMain.handle('dialog:openFile')
+    ipcMain.handle('ipc:connectClient', async() => {
+        const result = await mainProcessConnection.startConnection()
+        return result
+      })
 
     // Set app user model id for windows
     electronApp.setAppUserModelId('com.electron');
