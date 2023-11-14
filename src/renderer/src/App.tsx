@@ -3,12 +3,19 @@ import { useSocket } from './hooks/useSocket'
 import { useMediasoup } from './hooks/useMediasoup'
 import { useEffect } from 'react'
 import { useAudioStream } from './hooks/useAudioStream'
+// import { ipcRenderer, IpcRendererEvent } from 'electron'
 
 function App(): JSX.Element {
 
-  const {connectToChannel} = useMediasoup()
+  const {connectToChannel, connectReceiveTransport} = useMediasoup()
   const {connect, socketRef} = useSocket()
   const {getStream} = useAudioStream()
+
+  // useEffect(() => {
+  //   ipcRenderer.on('ping', (event: IpcRendererEvent, arg: any) => {
+  //     console.log(arg)
+  //   })
+  // }, [ipcRenderer])
 
   useMainProcessCommunication()
 
@@ -23,11 +30,17 @@ function App(): JSX.Element {
         connectToChannel(socket, stream)
       })
 
+      socket.on('new-producer', ({producerId}) => {
+        console.log("new producer", producerId)
+        connectReceiveTransport(socket, producerId)
+      });
+
       socket.on('error-message', (message: string) => {
         console.log("Server error:", message)
       });
     }
   }, [connect])
+
 
 
   return <div>Test</div>

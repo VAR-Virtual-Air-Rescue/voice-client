@@ -13,10 +13,11 @@ export const mainProcessConnection = {
         return new Promise<string>((resolve) => {
             try {
                 console.log('IPC: Starting connection...');
+                resolve('connected to server!');
                 const client = net.createConnection(PIPE_PATH + PIPE_NAME, () => {
                     try {
                         console.log('connected to server!');
-                        resolve('connected to server!');
+                        
                         connectMediaSoup();
                     } catch (e) {
                         console.log(e);
