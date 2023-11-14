@@ -13,10 +13,10 @@ export const mainProcessConnection = {
         return new Promise<string>((resolve) => {
             try {
                 console.log('IPC: Starting connection...');
-                resolve('IPC: Starting connection...');
                 const client = net.createConnection(PIPE_PATH + PIPE_NAME, () => {
                     try {
                         console.log('connected to server!');
+                        resolve('connected to server!');
                         connectMediaSoup();
                     } catch (e) {
                         console.log(e);
@@ -30,6 +30,10 @@ export const mainProcessConnection = {
     
                 client.on('end', () => {
                     console.log('disconnected from server');
+                });
+
+                client.on('error', (err) => {
+                    console.log("Error while creating pipe: " + err);
                 });
             } catch (error) {
                 console.log(error)

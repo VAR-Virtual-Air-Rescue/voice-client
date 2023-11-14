@@ -41,6 +41,7 @@ function createWindow(): void {
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
     //ipcMain.handle('dialog:openFile')
+
     ipcMain.handle('ipc:connectClient', async() => {
         const result = await mainProcessConnection.startConnection()
         return result
